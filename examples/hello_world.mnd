@@ -1,0 +1,5 @@
+include std;
+
+main: (void) => {
+    std::io::println("Hello World");
+}
