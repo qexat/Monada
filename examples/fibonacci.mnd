@@ -7,6 +7,6 @@ fib: n (int unsigned) -> (n <= 1)
 main: (void) => {
     n (int unsigned) = std::io::read([n]);
     for i (int unsigned) from 0 to n => {
-        std::io::println(fib(i) % (char*));
+        std::io::println(fib(i) % (std::string));
     }
 } -> (void)
