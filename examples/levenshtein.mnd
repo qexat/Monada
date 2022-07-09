@@ -1,7 +1,10 @@
 include std;
 
 emptyLevenshteinMatrix: (rowsNumber (int unsigned), columnsNumber (int unsigned)) => {
+    // creates an empty matrix filled by 0s of width len(first word) + 1 and height len(second word) + 1 
     distances (int unsigned[][])[rowsNumber+1][columnsNumber+1] = [[0...]...];
+    
+    // configures the matrix for levenshtein calculation
     for index (int unsigned) from 0 to rowsNumber + 1 => {
         distances[index][0] (int unsigned) = index;
         distances[0][index] (int unsigned) = index; 
@@ -11,9 +14,10 @@ emptyLevenshteinMatrix: (rowsNumber (int unsigned), columnsNumber (int unsigned)
 levenshteinMatrix: (str1 (std::string), str2 (std::string)) => {
     str1len (int unsigned) = std::len(str1);
     str2len (int unsigned) = std::len(str2);
-    distances (int unsigned**) = emptyLevenshteinMatrix(str1len, str2len);
+
+    distances (int unsigned[][]) = emptyLevenshteinMatrix(str1len, str2len);
     
-    (rowsDist, colsDist, diagDist) (int unsigned[]) = 0, 0, 0;
+    rowsDist, colsDist, diagDist (int unsigned...) = 0, 0, 0;
 
     for str1index (int unsigned) from 1 to (str1len + 1) => {
         for str2index (int unsigned) from 1 to (str2len + 1) => {
@@ -21,15 +25,18 @@ levenshteinMatrix: (str1 (std::string), str2 (std::string)) => {
             colsDist = distances[str1index - 1][str2index];
             diagDist = distances[str1index - 1][str2index - 1];
 
-            (str1[str1index -1] == str2[str2index - 1])
-                ? distances[str1index][str2index] (int unsigned) = distances[str1index - 1][str2index - 1];
-                ! distances[str1index][str2index] (int unsigned) = [rowsDist, colsDist, diagDist]::min() + 1;
+            if (str1[str1index -1] == str2[str2index - 1]) => {
+                distances[str1index][str2index] (int unsigned) = distances[str1index - 1][str2index - 1];
+            } else => {
+                distances[str1index][str2index] (int unsigned) = [rowsDist, colsDist, diagDist]::min() + 1;
+            }
         }
     }
 } -> distances (int unsigned[][]);
 
-distance: (str1 (std::string), str2 (std::string)) -> levenshteinMatrix(str1, str2)[std::len(str1)][std::len(str2)] (int unsigned);
+distance: (str1 (std::string), str2 (std::string)) ->
+    levenshteinMatrix(str1, str2)[std::len(str1)][std::len(str2)] (int unsigned);
 
-main: (void) => {
+main: () => {
     std::io::println(distance("hello", "world") % (std::string));
 }

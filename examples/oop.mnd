@@ -6,15 +6,13 @@ Person (type) => {
         name (std::string) = std::io::readstr(prompt="What is your name?\n");
         self::salute(name);
     }
-    salute@self: (name (std::string) optional) => {
-        (name)
-            ? std::io::println("Hi ${name}!")
-            ! std::io::println("Hello!");
-    };
+    salute@self: (name (std::string) optional) -> (name)
+        ?> std::io::println("Hi ${name}!")
+        !> std::io::println("Hello!");
 }
 
-main: (void) => {
-    p (Person) new("John", "Doe", 21);
+main: () => {
+    p (Person) ("John", "Doe", 21);
     p::salute(); // will print "Hello!"
     p::askName(); // will ask for an input and then print "Hi {input result}!"
 }

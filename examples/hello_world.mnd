@@ -1,5 +1,5 @@
 include std;
 
-main: (void) => {
+main: () => {
     std::io::println("Hello World");
 }
